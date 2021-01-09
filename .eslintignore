@@ -1,0 +1,5 @@
+node_modules/
+build/
+packages/*/bin/*
+packages/*/lib/*
+packages/puckit-template

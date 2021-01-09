@@ -1,0 +1,54 @@
+{
+  "name": "@puckit/scripts",
+  "version": "0.1.2",
+  "description": "Create React universal web-applications with zero configuration",
+  "homepage": "https://github.com/gubmax/puckit#readme",
+  "license": "MIT",
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "main": "lib/index.js",
+  "types": "lib/puckit-app.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gubmax/puckit.git",
+    "directory": "packages/puckit-scripts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "puckit-scripts": "bin/puckit-scripts.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@puckit/dev-utils": "0.1.2",
+    "babel-loader": "^8.2.2",
+    "commander": "^6.2.1",
+    "css-loader": "^5.0.1",
+    "detect-port-alt": "^1.1.6",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.17.0",
+    "eslint-webpack-plugin": "^2.4.1",
+    "html-webpack-plugin": "^5.0.0-beta.3",
+    "null-loader": "^4.0.1",
+    "sass": "^1.32.2",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "tapable": "^1.1.3",
+    "ts-loader": "^8.0.14",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.11.1",
+    "webpack-dev-server": "^3.11.1",
+    "webpack-node-externals": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/webpack-dev-server": "^3.11.1"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}

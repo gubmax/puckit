@@ -1,0 +1,28 @@
+{
+  "name": "@puckit/dev-utils",
+  "version": "0.1.2",
+  "description": "Utilities used by Puckit",
+  "homepage": "https://github.com/gubmax/puckit#readme",
+  "license": "MIT",
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gubmax/puckit.git",
+    "directory": "packages/puckit-dev-utils"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "log-symbols": "^4.0.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}
