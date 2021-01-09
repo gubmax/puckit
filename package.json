@@ -1,0 +1,42 @@
+{
+  "name": "waxy",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gubmax/waxy.git"
+  },
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "scripts": {
+    "build": "tsc --build",
+    "update-version": "lerna version --no-push",
+    "start": "cd packages/waxy-scripts && node bin/waxy-scripts.js start",
+    "start:app": "cd packages/waxy-scripts && node bin/waxy-scripts.js start:app",
+    "start:server": "cd packages/waxy-scripts && node bin/waxy-scripts.js start:server",
+    "lint": "eslint packages --ext .js,.jsx,.ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.20",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "eslint": "^7.17.0",
+    "eslint-config-airbnb-typescript": "^12.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.7",
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.5.3",
+    "typescript": "^4.1.3"
+  },
+  "lint-staged": {
+    "packages/**/*.{js|jsx|ts|tsx}": "npm run typecheck",
+    "packages/**/*.{js|jsx|json|ts|tsx}": "npm run lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "@waxy/template",
+  "description": "The base template for Waxy",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gubmax/waxy.git",
+    "directory": "packages/waxy-template"
+  },
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "files": [
+    "template",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}

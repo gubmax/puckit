@@ -1,0 +1,34 @@
+{
+  "name": "@waxy/create-app",
+  "description": "Create boilerplates for universal web-applications with zero configuration in one command",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gubmax/waxy.git",
+    "directory": "packages/waxy-create-app"
+  },
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "waxy-create-app": "bin/waxy-create-app.js"
+  },
+  "dependencies": {
+    "@waxy/dev-utils": "../waxy-dev-utils",
+    "@waxy/template": "../waxy-template",
+    "commander": "^6.1.0",
+    "execa": "^4.0.3",
+    "fs-extra": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1"
+  },
+  "files": [
+    "bin",
+    "lib",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}

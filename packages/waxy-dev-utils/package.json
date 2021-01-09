@@ -1,0 +1,24 @@
+{
+  "name": "@waxy/dev-utils",
+  "description": "Utilities used by Waxy",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gubmax/waxy.git",
+    "directory": "packages/waxy-dev-utils"
+  },
+  "author": "Maksim Gubyshev <gubyshev@gmail.com> (https://github.com/gubmax)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "log-symbols": "^4.0.0"
+  },
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}

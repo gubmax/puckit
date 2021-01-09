@@ -1,0 +1,29 @@
+{
+  "name": "my-modern-app",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "modern-app-scripts start",
+    "start:app": "modern-app-scripts start:app",
+    "start:server": "modern-app-scripts start:server"
+  },
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "koa": "^2.13.0",
+    "koa-cors": "0.0.16",
+    "koa-router": "^10.0.0",
+    "node-fetch": "^3.0.0-beta.9",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "typescript": "4.1.2"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.11.6",
+    "@types/koa-router": "^7.4.1",
+    "@types/koa__cors": "^3.0.2",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0",
+    "modern-app-dev-utils": "git+https://github.com/gubmax/modern-app-dev-utils.git",
+    "modern-app-scripts": "git+https://github.com/gubmax/modern-app-scripts.git"
+  }
+}
