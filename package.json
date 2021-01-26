@@ -31,12 +31,11 @@
     "typescript": "^4.1.3"
   },
   "lint-staged": {
-    "packages/**/*.{js,jsx,ts,tsx}": "npm run typecheck",
-    "packages/**/*.{js,jsx,json,ts,tsx}": "npm run lint"
+    "packages/**/*.{js,jsx,ts,tsx}": "npm run lint -- --fix"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run typecheck && lint-staged"
     }
   }
 }
