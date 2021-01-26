@@ -1,12 +1,13 @@
 import { existsSync, readdirSync, unlinkSync } from 'fs'
 import path from 'path'
-import { printMessage, MessageType } from '@puckit/dev-utils'
+
+import { printRemoveFiles } from './messages'
 
 const removeDist = () => {
   const directoryPath = './dist'
 
   if (existsSync(directoryPath)) {
-    printMessage(MessageType.INFO, `Removing files from directory "${directoryPath}"...`)
+    printRemoveFiles(directoryPath)
 
     readdirSync(directoryPath)
       .forEach((file) => {

@@ -1,6 +1,6 @@
 import Koa from 'koa'
 import cors, { Options } from '@koa/cors'
-import { MessageType, printMessage, clearConsole } from '@puckit/dev-utils'
+import { MessageTypes, printMessage, clearConsole } from '@puckit/dev-utils'
 
 import router from './router'
 
@@ -15,7 +15,7 @@ app.use(router.routes())
 
 app.on('error', (err: Error) => {
   clearConsole()
-  printMessage(MessageType.ERR, 'Server side error')
+  printMessage(MessageTypes.ERR, 'Server side error')
   console.error(err)
 })
 

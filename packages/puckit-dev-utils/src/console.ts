@@ -1,7 +1,7 @@
 import chalk, { ForegroundColor } from 'chalk'
 import LogSymbols from 'log-symbols'
 
-export enum MessageType {
+export enum MessageTypes {
   MAIN = 'MAIN',
   INFO = 'INFO',
   DONE = 'DONE',
@@ -10,27 +10,29 @@ export enum MessageType {
 }
 
 export const boldText = (text: string | number): string => chalk.bold(text)
+export const grayText = (text: string | number): string => chalk.gray(text)
 
-export const printMessage = (type: MessageType, text: string): void => {
+export const printMessage = (type: MessageTypes, text: string, tag?: string): void => {
   const colorByType: Record<string, typeof ForegroundColor> = {
-    [MessageType.INFO]: 'blue',
-    [MessageType.DONE]: 'green',
-    [MessageType.WARN]: 'yellow',
-    [MessageType.ERR]: 'red',
+    [MessageTypes.INFO]: 'blue',
+    [MessageTypes.DONE]: 'green',
+    [MessageTypes.WARN]: 'yellow',
+    [MessageTypes.ERR]: 'red',
   }
 
   const iconByType = {
-    [MessageType.INFO]: LogSymbols.info,
-    [MessageType.DONE]: LogSymbols.success,
-    [MessageType.WARN]: LogSymbols.warning,
-    [MessageType.ERR]: LogSymbols.error,
+    [MessageTypes.INFO]: LogSymbols.info,
+    [MessageTypes.DONE]: LogSymbols.success,
+    [MessageTypes.WARN]: LogSymbols.warning,
+    [MessageTypes.ERR]: LogSymbols.error,
   }
 
   const color = colorByType[type]
   let message = text
 
-  if (type !== MessageType.MAIN) {
-    message = `${iconByType[type]} ${chalk[color](text)}`
+  if (type !== MessageTypes.MAIN) {
+    const tagStr = tag ? ` ${grayText(`[${tag}]`)}:` : ''
+    message = `${iconByType[type]}${tagStr} ${chalk[color](text)}`
   }
 
   console.log(message)

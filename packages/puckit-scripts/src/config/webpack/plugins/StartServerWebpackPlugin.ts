@@ -1,6 +1,8 @@
 import cluster from 'cluster'
 import { Compilation, Compiler } from 'webpack'
-import { clearConsole, printMessage, MessageType } from '@puckit/dev-utils'
+import { clearConsole } from '@puckit/dev-utils'
+
+import { printSspArgument, printSspEntryNameNotFound, printSspError } from '../../etc/messages'
 
 class StartServerPlugin {
   bundleName: string
@@ -11,7 +13,7 @@ class StartServerPlugin {
 
   constructor(bundleName: string, inspectPort: number) {
     if (bundleName === null || typeof bundleName !== 'string') {
-      printMessage(MessageType.ERR, '[StartServerPlugin] Argument must be a string')
+      printSspArgument()
       process.exit()
     }
 
@@ -31,7 +33,7 @@ class StartServerPlugin {
 
     if (!assetName) {
       clearConsole()
-      printMessage(MessageType.ERR, `[StartServerPlugin] Entry name not found. Try one of: ${allAssetsNames.join(' ')}`)
+      printSspEntryNameNotFound(allAssetsNames)
       process.exit()
     }
 
@@ -47,7 +49,8 @@ class StartServerPlugin {
     })
 
     cluster.on('error', (err) => {
-      printMessage(MessageType.ERR, err)
+      printSspError()
+      console.error(err)
     })
 
     cluster.fork()

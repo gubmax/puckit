@@ -1,31 +1,48 @@
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
-import { printMessage, MessageType, clearConsole } from '@puckit/dev-utils'
+import { clearConsole } from '@puckit/dev-utils'
 
 import { PROTOCOL, HOST, PORT } from '../../config/settings'
 import choosePort from '../../config/etc/choosePort'
 import configFactory from '../../config/webpack/webpack.app.config'
 import devServerConfigFactory from '../../config/webpack/webpackDevServer.config'
 import createCompiler from '../../config/etc/createCompiler'
-import { consoleLink, consoleSuccessMsg } from '../../config/etc/console'
+import {
+  printLink, printSuccessMsg, printPortWasOccupied, printWds,
+  printFailedToCompile, MessageTags, printCompiling, printDoneCompilingWithWarnings,
+} from '../../config/etc/messages'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
-printMessage(MessageType.INFO, 'Starting webpack-dev-server...')
-
 const isChildProcess = !!process.argv[2]
 
-choosePort(HOST, PORT).then((currPort) => {
+const onOccupied = (port: number): void => {
+  clearConsole()
+  printPortWasOccupied(MessageTags.APP, port)
+}
+
+const onDoneCompiling = () => {
+  if (isChildProcess) {
+    return
+  }
+
+  printSuccessMsg(MessageTags.APP)
+  printLink(MessageTags.APP, 'App', PROTOCOL, HOST, PORT)
+}
+
+printWds()
+
+choosePort(HOST, PORT, onOccupied).then((currPort) => {
   if (currPort == null) {
     return
   }
 
   process.on('unhandledRejection', (err: Error) => {
     clearConsole()
-    printMessage(MessageType.ERR, 'Failed to compile webpack-dev-server.')
+    printFailedToCompile(MessageTags.APP)
     throw err
   })
 
@@ -33,21 +50,21 @@ choosePort(HOST, PORT).then((currPort) => {
   const compiler = createCompiler({
     webpack,
     config: webpackConfig,
-    onDoneCompiling: isChildProcess ? undefined : () => {
-      consoleSuccessMsg()
-      consoleLink('App', PROTOCOL, HOST, PORT)
-    },
+    onCompiling: () => printCompiling(MessageTags.APP),
+    onDoneCompilingWithWarnings: () => printDoneCompilingWithWarnings(MessageTags.APP),
+    onFailedToCompile: () => printFailedToCompile(MessageTags.APP),
+    onDoneCompiling,
   })
 
   const { publicPath } = webpackConfig.output || {}
   const webpackDevServerConfig = devServerConfigFactory(
     PROTOCOL, HOST, PORT, typeof publicPath === 'string' ? publicPath : '/', isChildProcess,
   )
-  const devServer = new WebpackDevServer(compiler as webpack.Compiler, webpackDevServerConfig)
+  const devServer = new WebpackDevServer(compiler, webpackDevServerConfig)
 
   devServer.listen(currPort, HOST, (err?: Error) => {
     if (err) {
-      printMessage(MessageType.ERR, 'Webpack-dev-server failed to start.')
+      printFailedToCompile(MessageTags.APP)
       console.log(err)
       return false
     }

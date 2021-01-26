@@ -9,13 +9,13 @@ export const moduleFileExtensions = [
   '.mjs',
   '.web.js',
   '.js',
+  '.web.jsx',
+  '.jsx',
   '.web.ts',
   '.ts',
   '.web.tsx',
   '.tsx',
   '.json',
-  '.web.jsx',
-  '.jsx',
 ]
 
 export const appPath = resolveApp('.')

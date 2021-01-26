@@ -1,6 +1,6 @@
 import execa from 'execa'
 
-import { printInstallingPackagesFailedMessage, printInstallPackagesMessage } from './console'
+import { printInstallingPackagesFailedMessage, printInstallPackagesMessage } from './messages'
 
 const installPackages = (projectPath: string, projectName: string): Promise<void> => {
   printInstallPackagesMessage(projectName)

@@ -1,15 +1,22 @@
 import Webpack, { Configuration, Compiler, Stats } from 'webpack'
-import { printMessage, clearConsole, MessageType } from '@puckit/dev-utils'
+import { clearConsole } from '@puckit/dev-utils'
 
 type CreateCompilerProps = {
   webpack: typeof Webpack;
   config: Configuration;
   callback?: (err?: Error, stats?: Stats) => void;
+  onCompiling?: () => void;
+  onFailedToCompile?: () => void;
   onDoneCompiling?: () => void;
+  onDoneCompilingWithWarnings?: () => void;
 }
 
 const createCompiler = ({
-  webpack, config, callback, onDoneCompiling = () => {},
+  webpack, config, callback,
+  onCompiling = () => {},
+  onFailedToCompile = () => {},
+  onDoneCompiling = () => {},
+  onDoneCompilingWithWarnings = () => {},
 }: CreateCompilerProps) => {
   let compiler: Compiler
 
@@ -17,7 +24,7 @@ const createCompiler = ({
     compiler = webpack(config, callback?.bind(webpack))
   } catch (err) {
     clearConsole()
-    printMessage(MessageType.ERR, 'Failed to compile.')
+    onFailedToCompile()
     console.log(err.message || err)
     process.exit(1)
   }
@@ -26,12 +33,12 @@ const createCompiler = ({
 
   hooks.invalid.tap('invalid', () => {
     clearConsole()
-    printMessage(MessageType.INFO, 'Compiling...')
+    onCompiling()
   })
 
   hooks.failed.tap('failed', (err) => {
     clearConsole()
-    printMessage(MessageType.ERR, 'Failed to compile.')
+    onFailedToCompile()
     console.log(err)
   })
 
@@ -50,13 +57,13 @@ const createCompiler = ({
       const error: { message: string } | string = errors[0]
       const message = typeof error === 'object' ? error.message : error
 
-      printMessage(MessageType.ERR, 'Failed to compile.')
+      onFailedToCompile()
       console.log(message)
       return false
     }
 
     if (warnings.length) {
-      printMessage(MessageType.WARN, 'Compiled with warnings.')
+      onDoneCompilingWithWarnings()
       console.log(warnings.join('\n\n'))
     }
 

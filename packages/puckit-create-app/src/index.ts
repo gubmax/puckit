@@ -5,7 +5,7 @@ import copyDir from './utils/copyDir'
 import installPackages from './utils/installPackages'
 import {
   printFolderAlreadyExistsMessage, printInstalledMessage, printMissingProjectNameMessage,
-} from './utils/console'
+} from './utils/messages'
 
 const createModernApp = async (projectName: string) => {
   if (!projectName) {

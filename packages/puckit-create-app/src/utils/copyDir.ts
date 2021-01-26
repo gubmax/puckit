@@ -1,7 +1,7 @@
 import { resolve as pathResolve } from 'path'
 import { copy, pathExists, move } from 'fs-extra'
 
-import { printCopyingMessage, printCopyingFailedMessage } from './console'
+import { printCopyingMessage, printCopyingFailedMessage } from './messages'
 
 const copyDir = async (
   templatePath: string, projectPath: string, projectName: string,

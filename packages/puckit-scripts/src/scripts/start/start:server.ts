@@ -1,29 +1,37 @@
 import webpack, { Stats } from 'webpack'
-import { printMessage, MessageType, clearConsole } from '@puckit/dev-utils'
+import { clearConsole } from '@puckit/dev-utils'
 
 import { PROTOCOL, HOST, SERVER_PORT } from '../../config/settings'
 import choosePort from '../../config/etc/choosePort'
 import configFactory from '../../config/webpack/webpack.server.config'
 import createCompiler from '../../config/etc/createCompiler'
-import { consoleLink, consoleSuccessMsg } from '../../config/etc/console'
+import {
+  printLink, printSuccessMsg, MessageTags, printCompiling,
+  printDevServer, printDoneCompilingWithWarnings, printFailedToCompile, printPortWasOccupied,
+} from '../../config/etc/messages'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
-printMessage(MessageType.INFO, 'Starting development server...')
-
 const isChildProcess = !!process.argv[2]
 
-choosePort(HOST, SERVER_PORT).then((currPort) => {
+const onOccupied = (port: number): void => {
+  clearConsole()
+  printPortWasOccupied(MessageTags.SERVER, port)
+}
+
+printDevServer()
+
+choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
   if (currPort === null) {
     return
   }
 
   process.on('unhandledRejection', (err: Error) => {
     clearConsole()
-    printMessage(MessageType.ERR, 'Failed to compile server.')
+    printFailedToCompile(MessageTags.SERVER)
     throw err
   })
 
@@ -32,7 +40,7 @@ choosePort(HOST, SERVER_PORT).then((currPort) => {
   const callback = (err?: Error, stats?: Stats) => {
     if (err || stats?.hasErrors()) {
       clearConsole()
-      printMessage(MessageType.ERR, 'Failed to compile.')
+      printFailedToCompile(MessageTags.SERVER)
       const compilationErr = stats?.compilation.errors[0] || { message: undefined }
       console.log(err || compilationErr.message || compilationErr)
       return
@@ -43,9 +51,16 @@ choosePort(HOST, SERVER_PORT).then((currPort) => {
       return
     }
 
-    consoleSuccessMsg()
-    consoleLink('Server', PROTOCOL, HOST, currPort)
+    printSuccessMsg(MessageTags.SERVER)
+    printLink(MessageTags.SERVER, 'Server', PROTOCOL, HOST, currPort)
   }
 
-  createCompiler({ webpack, config: webpackConfig, callback })
+  createCompiler({
+    webpack,
+    config: webpackConfig,
+    callback,
+    onCompiling: () => printCompiling(MessageTags.SERVER),
+    onDoneCompilingWithWarnings: () => printDoneCompilingWithWarnings(MessageTags.SERVER),
+    onFailedToCompile: () => printFailedToCompile(MessageTags.SERVER),
+  })
 })

@@ -1,13 +1,16 @@
 import { fork } from 'child_process'
 import { readFileSync } from 'fs'
-import { printMessage, MessageType } from '@puckit/dev-utils'
 
 import {
   PROTOCOL, HOST, PORT, SERVER_PORT,
 } from '../../config/settings'
 import removeDist from '../../config/etc/removeDist'
-import { consoleLink, consoleSuccessMsg } from '../../config/etc/console'
 import { appDist } from '../../config/paths'
+import {
+  printLink, printSuccessMsg, MessageTags, printWaitingWebpack,
+  printCouldNotFindWebpack,
+  printWdsStarted,
+} from '../../config/etc/messages'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
@@ -20,13 +23,13 @@ enum ScriptNames {
 }
 
 const waitForWebpack = async () => {
-  printMessage(MessageType.INFO, 'Waiting webpack output...')
+  printWaitingWebpack()
   for (;;) {
     try {
       readFileSync(`${appDist}/index.html`)
       return
     } catch (err) {
-      printMessage(MessageType.MAIN, 'Could not find webpack output. Will retry in a few seconds...')
+      printCouldNotFindWebpack()
       // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) => setTimeout(resolve, 2000))
     }
@@ -42,11 +45,11 @@ const spawnWorker = (scriptName: string) => fork(
 removeDist()
 
 spawnWorker(ScriptNames.APP).on('message', async () => {
-  printMessage(MessageType.DONE, 'Webpack-dev-server started!')
+  printWdsStarted()
   await waitForWebpack()
   spawnWorker(ScriptNames.SERVER).on('message', () => {
-    consoleSuccessMsg()
-    consoleLink('App', PROTOCOL, HOST, PORT)
-    consoleLink('Server', PROTOCOL, HOST, SERVER_PORT)
+    printSuccessMsg(MessageTags.PUCKIT)
+    printLink(MessageTags.APP, 'App', PROTOCOL, HOST, PORT)
+    printLink(MessageTags.SERVER, 'Server', PROTOCOL, HOST, SERVER_PORT)
   })
 })
