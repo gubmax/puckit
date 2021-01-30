@@ -1,4 +1,4 @@
-import cluster from 'cluster'
+import cluster, { Worker } from 'cluster'
 import { Compilation, Compiler } from 'webpack'
 import { clearConsole } from '@puckit/dev-utils'
 
@@ -9,7 +9,7 @@ class StartServerPlugin {
 
   inspectPort: number
 
-  worker: any
+  worker: Worker
 
   constructor(bundleName: string, inspectPort: number) {
     if (bundleName === null || typeof bundleName !== 'string') {
@@ -25,7 +25,7 @@ class StartServerPlugin {
     this.startServer = this.startServer.bind(this)
   }
 
-  startServer(compilation: Compilation, callback: Function) {
+  startServer(compilation: Compilation, callback: Function): void {
     const { bundleName, inspectPort } = this
     const { assetsInfo, outputOptions } = compilation
     const allAssetsNames = [...assetsInfo.keys()]
@@ -57,7 +57,7 @@ class StartServerPlugin {
     callback()
   }
 
-  afterEmit(compilation: Compilation, callback: Function) {
+  afterEmit(compilation: Compilation, callback: Function): void {
     const { worker, startServer } = this
 
     if (worker && worker.isConnected()) {
@@ -67,7 +67,7 @@ class StartServerPlugin {
     startServer(compilation, callback)
   }
 
-  apply(compiler: Compiler) {
+  apply(compiler: Compiler): void {
     const { afterEmit } = this
     const { hooks } = compiler
     hooks.afterEmit.tapAsync('StartServerPlugin', afterEmit)

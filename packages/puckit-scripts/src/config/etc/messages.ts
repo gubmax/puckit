@@ -1,72 +1,55 @@
 import {
   boldText, clearConsole, MessageTypes, printMessage,
+  printMessageWithSpinner, Spinner,
 } from '@puckit/dev-utils'
 
+import { LinkTypes, MessageTags } from '../constants'
 import { appPath } from '../paths'
 
-export enum MessageTags {
-  PUCKIT = 'puckit',
-  APP = 'puckit:app',
-  SERVER = 'puckit:server',
-  START_SERVER_PLUGIN = 'puckit:start-server-plugin',
-}
-
 export const printPortWasOccupied = (tag: MessageTags, defaultPort: string | number): void => {
-  printMessage(MessageTypes.ERR, `Port ${defaultPort} was occupied.`)
+  printMessage(MessageTypes.ERR, `Port ${defaultPort} was occupied`, tag)
 }
 
 export const printWds = (): void => {
-  printMessage(MessageTypes.INFO, 'Starting webpack-dev-server...', MessageTags.APP)
+  printMessage(MessageTypes.INFO, 'Starting webpack-dev-server', MessageTags.APP)
 }
 
 export const printDevServer = (): void => {
-  printMessage(MessageTypes.INFO, 'Starting development server...', MessageTags.SERVER)
+  printMessage(MessageTypes.INFO, 'Starting development server', MessageTags.SERVER)
 }
 
 export const printFailedToCompile = (tag: MessageTags): void => {
-  printMessage(MessageTypes.ERR, 'Failed to compile.', tag)
+  printMessage(MessageTypes.ERR, 'Failed to compile', tag)
 }
 
-export const printCompiling = (tag: MessageTags): void => {
-  printMessage(MessageTypes.INFO, 'Compiling...', tag)
-}
+export const getCompilingMessage = (tag: MessageTags): Spinner => printMessageWithSpinner(MessageTypes.INFO, 'Compiling...', tag)
 
-export const printDoneCompiling = (tag: MessageTags): void => {
+export const printCompilingSuccess = (tag: MessageTags): void => {
   printMessage(MessageTypes.DONE, 'Compiled successfully!', tag)
 }
 
-export const printDoneCompilingWithWarnings = (tag: MessageTags): void => {
-  printMessage(MessageTypes.WARN, 'Compiled with warnings.', tag)
+export const printCompiledWithWarnings = (tag: MessageTags): void => {
+  printMessage(MessageTypes.WARN, 'Compiled with warnings', tag)
 }
 
 const appName = require(`${appPath}/package.json`).name
 
 export const printSuccessMsg = (tag: MessageTags): void => {
   clearConsole()
-  printDoneCompiling(tag)
-  printMessage(MessageTypes.MAIN, `\nYou can now view ${boldText(appName)} in the browser.\n`)
+  printCompilingSuccess(tag)
+  printMessage(MessageTypes.MAIN, `\nYou can now view ${boldText(appName)} in the browser\n`)
 }
 
 export const printLink = (
-  tag: MessageTags, name: string, protocol: string, host: string, port: string | number,
+  type: LinkTypes, protocol: string, host: string, port: string | number,
 ): void => (
-  printMessage(MessageTypes.MAIN, `${boldText(name)}: ${protocol}://${host}:${boldText(port)}`, tag)
+  printMessage(MessageTypes.MAIN, `${boldText(type)}: ${protocol}://${host}:${boldText(port)}`)
 )
 
-export const printWdsStarted = (): void => {
-  printMessage(MessageTypes.DONE, 'Webpack-dev-server started!', MessageTags.APP)
-}
-
-export const printWaitingWebpack = (): void => {
-  printMessage(MessageTypes.INFO, 'Waiting webpack output...', MessageTags.PUCKIT)
-}
-
-export const printCouldNotFindWebpack = (): void => {
-  printMessage(MessageTypes.MAIN, 'Could not find webpack output. Will retry in a few seconds...')
-}
+export const getWaitingWebpackMessage = (): Spinner => printMessageWithSpinner(MessageTypes.INFO, 'Waiting webpack output', MessageTags.PUCKIT)
 
 export const printRemoveFiles = (directoryPath: string): void => {
-  printMessage(MessageTypes.INFO, `Removing files from directory "${directoryPath}"...`, MessageTags.PUCKIT)
+  printMessage(MessageTypes.INFO, `Removing files from directory "${directoryPath}"`, MessageTags.PUCKIT)
 }
 
 export const printSspArgument = (): void => {
@@ -78,5 +61,5 @@ export const printSspEntryNameNotFound = (allAssetsNames: string[]): void => {
 }
 
 export const printSspError = (): void => {
-  printMessage(MessageTypes.ERR, 'Error.', MessageTags.START_SERVER_PLUGIN)
+  printMessage(MessageTypes.ERR, 'Error', MessageTags.START_SERVER_PLUGIN)
 }

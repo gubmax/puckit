@@ -1,44 +1,45 @@
-import Webpack, { Configuration, Compiler, Stats } from 'webpack'
 import { clearConsole } from '@puckit/dev-utils'
+import Webpack, { Configuration, Compiler, Stats } from 'webpack'
+
+import noop from '../helpers/noop'
 
 type CreateCompilerProps = {
   webpack: typeof Webpack;
   config: Configuration;
   callback?: (err?: Error, stats?: Stats) => void;
-  onCompiling?: () => void;
-  onFailedToCompile?: () => void;
-  onDoneCompiling?: () => void;
-  onDoneCompilingWithWarnings?: () => void;
+  onInvalid: () => void;
+  onAfterCompile?: () => void,
+  onFailed?: () => void;
+  onWarning?: () => void;
+  onSuccess?: () => void;
 }
 
 const createCompiler = ({
   webpack, config, callback,
-  onCompiling = () => {},
-  onFailedToCompile = () => {},
-  onDoneCompiling = () => {},
-  onDoneCompilingWithWarnings = () => {},
+  onInvalid = noop,
+  onAfterCompile = noop,
+  onFailed = noop,
+  onWarning = noop,
+  onSuccess = noop,
 }: CreateCompilerProps) => {
   let compiler: Compiler
 
   try {
     compiler = webpack(config, callback?.bind(webpack))
   } catch (err) {
-    clearConsole()
-    onFailedToCompile()
+    onFailed()
     console.log(err.message || err)
     process.exit(1)
   }
 
   const { hooks } = compiler
 
-  hooks.invalid.tap('invalid', () => {
-    clearConsole()
-    onCompiling()
-  })
+  hooks.invalid.tap('invalid', onInvalid)
+
+  hooks.afterCompile.tap('afterCompile', onAfterCompile)
 
   hooks.failed.tap('failed', (err) => {
-    clearConsole()
-    onFailedToCompile()
+    onFailed()
     console.log(err)
   })
 
@@ -55,20 +56,20 @@ const createCompiler = ({
       }
 
       const error: { message: string } | string = errors[0]
-      const message = typeof error === 'object' ? error.message : error
+      const message = error instanceof Object ? error.message : error
 
-      onFailedToCompile()
+      onFailed()
       console.log(message)
-      return false
+      return
     }
 
     if (warnings.length) {
-      onDoneCompilingWithWarnings()
+      onWarning()
       console.log(warnings.join('\n\n'))
+      return
     }
 
-    onDoneCompiling()
-    return true
+    onSuccess()
   })
 
   return compiler

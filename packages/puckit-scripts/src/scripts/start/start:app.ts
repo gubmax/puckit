@@ -9,34 +9,36 @@ import devServerConfigFactory from '../../config/webpack/webpackDevServer.config
 import createCompiler from '../../config/etc/createCompiler'
 import {
   printLink, printSuccessMsg, printPortWasOccupied, printWds,
-  printFailedToCompile, MessageTags, printCompiling, printDoneCompilingWithWarnings,
+  printFailedToCompile, getCompilingMessage, printCompiledWithWarnings,
 } from '../../config/etc/messages'
+import checkChildProcess from '../../config/helpers/checkChildProcess'
+import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
-const isChildProcess = !!process.argv[2]
+const isChildProcess = checkChildProcess()
+const printCompiling = getCompilingMessage(MessageTags.APP)
 
-const onOccupied = (port: number): void => {
-  clearConsole()
+function onOccupied(port: number): void {
   printPortWasOccupied(MessageTags.APP, port)
 }
 
-const onDoneCompiling = () => {
+function onDoneCompiling(): void {
   if (isChildProcess) {
     return
   }
 
   printSuccessMsg(MessageTags.APP)
-  printLink(MessageTags.APP, 'App', PROTOCOL, HOST, PORT)
+  printLink(LinkTypes.APP, PROTOCOL, HOST, PORT)
 }
 
 printWds()
 
 choosePort(HOST, PORT, onOccupied).then((currPort) => {
-  if (currPort == null) {
+  if (currPort === null) {
     return
   }
 
@@ -50,10 +52,25 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
   const compiler = createCompiler({
     webpack,
     config: webpackConfig,
-    onCompiling: () => printCompiling(MessageTags.APP),
-    onDoneCompilingWithWarnings: () => printDoneCompilingWithWarnings(MessageTags.APP),
-    onFailedToCompile: () => printFailedToCompile(MessageTags.APP),
-    onDoneCompiling,
+    onInvalid: () => {
+      if (isChildProcess) {
+        process.send?.(ForkMessages.COMPILING)
+        return
+      }
+      clearConsole()
+      printCompiling.start()
+    },
+    onAfterCompile: () => {
+      if (isChildProcess) {
+        process.send?.(ForkMessages.AFTER_COMPILING)
+        return
+      }
+
+      printCompiling.stop()
+    },
+    onFailed: () => printFailedToCompile(MessageTags.APP),
+    onWarning: () => printCompiledWithWarnings(MessageTags.APP),
+    onSuccess: onDoneCompiling,
   })
 
   const { publicPath } = webpackConfig.output || {}
@@ -66,14 +83,12 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
     if (err) {
       printFailedToCompile(MessageTags.APP)
       console.log(err)
-      return false
+      return
     }
 
-    if (isChildProcess && process.send) {
-      process.send(currPort)
+    if (isChildProcess) {
+      process.send?.(ForkMessages.APP_SUCCESS)
     }
-
-    return true
   })
 
   Array.of('SIGINT', 'SIGTERM').forEach((sig) => {

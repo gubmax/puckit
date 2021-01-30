@@ -5,20 +5,22 @@ import { PROTOCOL, HOST, SERVER_PORT } from '../../config/settings'
 import choosePort from '../../config/etc/choosePort'
 import configFactory from '../../config/webpack/webpack.server.config'
 import createCompiler from '../../config/etc/createCompiler'
+import checkChildProcess from '../../config/helpers/checkChildProcess'
 import {
-  printLink, printSuccessMsg, MessageTags, printCompiling,
-  printDevServer, printDoneCompilingWithWarnings, printFailedToCompile, printPortWasOccupied,
+  printLink, printSuccessMsg, getCompilingMessage, printDevServer,
+  printCompiledWithWarnings, printFailedToCompile, printPortWasOccupied,
 } from '../../config/etc/messages'
+import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
-const isChildProcess = !!process.argv[2]
+const isChildProcess = checkChildProcess()
+const printCompiling = getCompilingMessage(MessageTags.SERVER)
 
-const onOccupied = (port: number): void => {
-  clearConsole()
+function onOccupied(port: number): void {
   printPortWasOccupied(MessageTags.SERVER, port)
 }
 
@@ -46,21 +48,35 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
       return
     }
 
-    if (isChildProcess && process.send) {
-      process.send(currPort)
+    if (isChildProcess) {
+      process.send?.(ForkMessages.SERVER_SUCCESS)
       return
     }
 
     printSuccessMsg(MessageTags.SERVER)
-    printLink(MessageTags.SERVER, 'Server', PROTOCOL, HOST, currPort)
+    printLink(LinkTypes.SERVER, PROTOCOL, HOST, currPort)
   }
 
   createCompiler({
     webpack,
     config: webpackConfig,
     callback,
-    onCompiling: () => printCompiling(MessageTags.SERVER),
-    onDoneCompilingWithWarnings: () => printDoneCompilingWithWarnings(MessageTags.SERVER),
-    onFailedToCompile: () => printFailedToCompile(MessageTags.SERVER),
+    onInvalid: () => {
+      if (isChildProcess) {
+        process.send?.(ForkMessages.COMPILING)
+        return
+      }
+      clearConsole()
+      printCompiling.start()
+    },
+    onAfterCompile: () => {
+      if (isChildProcess) {
+        process.send?.(ForkMessages.AFTER_COMPILING)
+        return
+      }
+      printCompiling.stop()
+    },
+    onFailed: () => printFailedToCompile(MessageTags.SERVER),
+    onWarning: () => printCompiledWithWarnings(MessageTags.SERVER),
   })
 })

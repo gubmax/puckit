@@ -1,4 +1,4 @@
 export {
   MessageTypes, boldText, grayText, printMessage,
-  isInteractive, clearConsole,
+  isInteractive, clearConsole, Spinner, printMessageWithSpinner,
 } from './console'
