@@ -1,12 +1,11 @@
 import React from 'react'
-import { RouterContext } from 'koa-router'
 import { renderToString } from 'react-dom/server'
 
-import App from '../src/App'
+import {App} from '../src/components/layout/App'
 import htmlTemplate from '../dist/index.html'
 
-const serverRenderer = async (ctx: RouterContext): Promise<void> => {
-  const { getServerSideProps } = require(`${__dirname}/../src/Main`)
+export async function serverRenderer(): Promise<string> {
+  const { getServerSideProps } = require(`${__dirname}/../src/components/layout/Main`)
   const serverSideProps: object = await getServerSideProps()
 
   const appTemplate = renderToString(<App serverSideProps={serverSideProps} />)
@@ -21,7 +20,5 @@ const serverRenderer = async (ctx: RouterContext): Promise<void> => {
     `)
     .replace('<div id="root">', `<div id="root">${appTemplate}`)
 
-  ctx.body = markup
+  return markup
 }
-
-export default serverRenderer

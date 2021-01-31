@@ -1,12 +1,14 @@
-import Router from 'koa-router'
+import { FastifyInstance, RouteShorthandOptions } from 'fastify'
 
-import getData from './getData'
-import serverRenderer from './serverRenderer'
+import { DataService } from './DataService'
+import { serverRenderer } from './serverRenderer'
 
-const router = new Router()
+const opts: RouteShorthandOptions = {}
 
-router
-  .post('/api/data', getData)
-  .get('/', serverRenderer)
-
-export default router
+export function useRouter(server: FastifyInstance) {
+  server.post('/api/data', opts, DataService.getData)
+  server.get('*', opts, (response, reply) => {
+    reply.type('text/html')
+    return serverRenderer()
+  })
+}
