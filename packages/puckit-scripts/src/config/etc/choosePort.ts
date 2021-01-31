@@ -1,9 +1,10 @@
+// @ts-ignore
 import detect from 'detect-port-alt'
 
-const choosePort = (
+async function choosePort(
   host: string, defaultPort: number, onOccupied: (port: number) => void,
-): Promise<number | null> => (
-  detect(defaultPort, host).then((port: number, err: Error) => {
+): Promise<number | null> {
+  return detect(defaultPort, host).then((port: number, err: Error) => {
     if (err) {
       throw err
     }
@@ -15,6 +16,6 @@ const choosePort = (
 
     return port
   })
-)
+}
 
 export default choosePort

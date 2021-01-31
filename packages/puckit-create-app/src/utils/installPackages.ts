@@ -2,7 +2,7 @@ import execa from 'execa'
 
 import { printInstallingPackagesFailedMessage, printInstallPackagesMessage } from './messages'
 
-const installPackages = (projectPath: string, projectName: string): Promise<void> => {
+function installPackages(projectPath: string, projectName: string): Promise<void> {
   printInstallPackagesMessage(projectName)
 
   process.chdir(projectPath)

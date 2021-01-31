@@ -9,7 +9,7 @@ class StartServerPlugin {
 
   inspectPort: number
 
-  worker: Worker
+  worker: Worker | null
 
   constructor(bundleName: string, inspectPort: number) {
     if (bundleName === null || typeof bundleName !== 'string') {

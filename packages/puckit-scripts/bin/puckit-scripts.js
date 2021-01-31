@@ -5,7 +5,7 @@ const child_process = require('child_process');
 const program = require('commander');
 const pkg = require('../package.json');
 
-const runScript = (scriptName) => {
+function runScript(scriptName) {
   const result = child_process.spawnSync(
     'node',
     [require.resolve('../lib/scripts/' + scriptName)],

@@ -12,8 +12,13 @@ export enum MessageTypes {
   ERR = 'ERR',
 }
 
-export const boldText = (text: string | number): string => chalk.bold(text)
-export const grayText = (text: string | number): string => chalk.gray(text)
+export function boldText(text: string | number): string {
+  return chalk.bold(text)
+}
+
+export function grayText(text: string | number): string {
+  return chalk.gray(text)
+}
 
 interface GetMessageArg {
   type: MessageTypes
@@ -22,9 +27,9 @@ interface GetMessageArg {
   withoutIcon?: boolean
 }
 
-export const getMessage = ({
+export function getMessage({
   type, text, tag, withoutIcon = false,
-}: GetMessageArg): string => {
+}: GetMessageArg): string {
   const colorByType: Record<string, typeof ForegroundColor> = {
     [MessageTypes.DONE]: 'green',
     [MessageTypes.WARN]: 'yellow',
@@ -49,21 +54,23 @@ export const getMessage = ({
   return `${iconStr}${tagStr}${solorStr}`
 }
 
-export const printMessage = (type: MessageTypes, text: string, tag?: string): void => {
+export function printMessage(type: MessageTypes, text: string, tag?: string): void {
   const message = getMessage({ type, text, tag })
   console.log(message)
 }
 
-export const isInteractive = (): boolean => process.stdout.isTTY
+export function isInteractive(): boolean {
+  return process.stdout.isTTY
+}
 
 export interface Spinner {
   start: () => void,
   stop: () => void,
 }
 
-export const printMessageWithSpinner = (
+export function printMessageWithSpinner(
   type: MessageTypes, text: string, tag?: string,
-): Spinner => {
+): Spinner {
   const message = getMessage({
     type, text, tag, withoutIcon: true,
   })
@@ -86,7 +93,7 @@ export const printMessageWithSpinner = (
   }
 }
 
-export const clearConsole = (): void => {
+export function clearConsole(): void {
   const output = process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H'
 
   if (isInteractive()) {

@@ -2,7 +2,10 @@ import { resolve } from 'path'
 import { realpathSync } from 'fs'
 
 const appDirectory = realpathSync(process.cwd())
-const resolveApp = (relativePath: string) => resolve(appDirectory, relativePath)
+
+function resolveApp(relativePath: string): string {
+  return resolve(appDirectory, relativePath)
+}
 
 export const moduleFileExtensions = [
   '.web.mjs',

@@ -39,7 +39,7 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
 
   const webpackConfig = configFactory(currPort)
 
-  const callback = (err?: Error, stats?: Stats) => {
+  const callback = (err?: Error, stats?: Stats): void => {
     if (err || stats?.hasErrors()) {
       clearConsole()
       printFailedToCompile(MessageTags.SERVER)

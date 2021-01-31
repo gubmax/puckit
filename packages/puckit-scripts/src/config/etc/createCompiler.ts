@@ -14,14 +14,14 @@ type CreateCompilerProps = {
   onSuccess?: () => void;
 }
 
-const createCompiler = ({
+function createCompiler({
   webpack, config, callback,
   onInvalid = noop,
   onAfterCompile = noop,
   onFailed = noop,
   onWarning = noop,
   onSuccess = noop,
-}: CreateCompilerProps) => {
+}: CreateCompilerProps): Compiler {
   let compiler: Compiler
 
   try {

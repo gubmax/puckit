@@ -3,7 +3,7 @@ import path from 'path'
 
 import { printRemoveFiles } from './messages'
 
-const removeDist = () => {
+function removeDist(): void {
   const directoryPath = './dist'
 
   if (existsSync(directoryPath)) {

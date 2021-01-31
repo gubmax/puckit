@@ -3,9 +3,9 @@ import { copy, pathExists, move } from 'fs-extra'
 
 import { printCopyingMessage, printCopyingFailedMessage } from './messages'
 
-const copyDir = async (
+async function copyDir(
   templatePath: string, projectPath: string, projectName: string,
-): Promise<boolean | void> => {
+): Promise<boolean | void> {
   printCopyingMessage(projectName)
 
   try {
