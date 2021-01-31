@@ -1,6 +1,7 @@
 import { HotModuleReplacementPlugin, DefinePlugin, Configuration } from 'webpack'
 import ESLintWebpackPlugin from 'eslint-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
 
 import {
   appSrc, appDist, moduleFileExtensions, appHtml,
@@ -20,7 +21,7 @@ const configFactory = (port: number): Configuration => ({
     path: appDist,
     filename: '[name].js',
     chunkFilename: '[name].[contenthash:8].chunk.js',
-    publicPath: `http://localhost:${port}`,
+    publicPath: `http://localhost:${port}/`,
     globalObject: 'this',
   },
   optimization: {
@@ -56,15 +57,18 @@ const configFactory = (port: number): Configuration => ({
             use: [
               {
                 loader: 'babel-loader',
-                options: babelOptions,
+                options: { ...babelOptions, plugins: [require.resolve('react-refresh/babel')] },
               },
-              'ts-loader',
+              {
+                loader: 'ts-loader',
+                options: { transpileOnly: true },
+              },
             ],
           },
           {
             test: /\.(m?jsx?)$/,
             loader: 'babel-loader',
-            options: babelOptions,
+            options: { ...babelOptions, plugins: [require.resolve('react-refresh/babel')] },
           },
           styleLoaderConfig,
         ],
@@ -73,6 +77,7 @@ const configFactory = (port: number): Configuration => ({
   },
   plugins: [
     new HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin({ overlay: false }),
     new DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
