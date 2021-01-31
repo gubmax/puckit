@@ -7,10 +7,12 @@ type AppProps = {
   serverSideProps?: ServerSideProps,
 }
 
-const App: FC<AppProps> = ({ serverSideProps = {} }) => (
-  <ServerSidePropsProvider value={serverSideProps}>
-    <Main />
-  </ServerSidePropsProvider>
-)
+const App: FC<AppProps> = ({ serverSideProps = {} }) => {
+  return (
+    <ServerSidePropsProvider value={serverSideProps}>
+      <Main />
+    </ServerSidePropsProvider>
+  )
+}
 
 export default App

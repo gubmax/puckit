@@ -1,4 +1,4 @@
-import React from 'react'
+import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 
 import {App} from '../src/components/layout/App'
@@ -8,7 +8,8 @@ export async function serverRenderer(): Promise<string> {
   const { getServerSideProps } = require(`${__dirname}/../src/components/layout/Main`)
   const serverSideProps: object = await getServerSideProps()
 
-  const appTemplate = renderToString(<App serverSideProps={serverSideProps} />)
+  const app = createElement(App, {serverSideProps})
+  const initialHtml = renderToString(app)
 
   const markup = htmlTemplate
     .replace('</head>', `
@@ -18,7 +19,7 @@ export async function serverRenderer(): Promise<string> {
         </script>
       </head>
     `)
-    .replace('<div id="root">', `<div id="root">${appTemplate}`)
+    .replace('<div id="root">', `<div id="root">${initialHtml}`)
 
   return markup
 }

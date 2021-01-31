@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from 'react-dom'
+import { hydrate } from 'react-dom'
 
 import App from './App'
 
@@ -10,4 +10,4 @@ if (window.SERVER_SIDE_PROPS) {
   delete window.SERVER_SIDE_PROPS
 }
 
-render(<App serverSideProps={serverSideProps} />, document.getElementById('root'))
+hydrate(<App serverSideProps={serverSideProps} />, document.getElementById('root'))
