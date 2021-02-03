@@ -46,6 +46,7 @@ function configFactory(inspectPort: number): Configuration {
           test: /\.(m?tsx?)$/,
           exclude: /node_modules/,
           loader: 'ts-loader',
+          options: { colors: false },
         },
         {
           test: /(\.module)?\.(s?css|sass)$/,

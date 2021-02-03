@@ -62,7 +62,7 @@ function configFactory(port: number): Configuration {
                 },
                 {
                   loader: 'ts-loader',
-                  options: { transpileOnly: true },
+                  options: { colors: false },
                 },
               ],
             },
