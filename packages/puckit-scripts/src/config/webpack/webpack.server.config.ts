@@ -8,6 +8,7 @@ import {
   appPath,
 } from '../paths'
 import StartServerPlugin from './plugins/StartServerWebpackPlugin'
+import tsLoader from './shared/tsLoader'
 
 function configFactory(inspectPort: number): Configuration {
   return {
@@ -45,8 +46,7 @@ function configFactory(inspectPort: number): Configuration {
         {
           test: /\.(m?tsx?)$/,
           exclude: /node_modules/,
-          loader: 'ts-loader',
-          options: { colors: false },
+          ...tsLoader,
         },
         {
           test: /(\.module)?\.(s?css|sass)$/,

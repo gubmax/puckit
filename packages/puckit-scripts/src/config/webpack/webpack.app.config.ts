@@ -9,6 +9,7 @@ import {
 } from '../paths'
 import styleLoaderConfig from './shared/styleLoaderConfig'
 import babelOptions from './shared/babelOptions'
+import tsLoader from './shared/tsLoader'
 
 function configFactory(port: number): Configuration {
   return {
@@ -60,10 +61,7 @@ function configFactory(port: number): Configuration {
                   loader: 'babel-loader',
                   options: { ...babelOptions, plugins: [require.resolve('react-refresh/babel')] },
                 },
-                {
-                  loader: 'ts-loader',
-                  options: { colors: false },
-                },
+                tsLoader,
               ],
             },
             {
