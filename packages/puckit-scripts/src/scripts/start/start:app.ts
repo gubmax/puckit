@@ -75,7 +75,7 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
 
   const { publicPath } = webpackConfig.output || {}
   const webpackDevServerConfig = devServerConfigFactory(
-    PROTOCOL, HOST, PORT, typeof publicPath === 'string' ? publicPath : '/', isChildProcess,
+    PROTOCOL, HOST, PORT, typeof publicPath === 'string' ? publicPath : '/',
   )
   const devServer = new WebpackDevServer(compiler, webpackDevServerConfig)
 

@@ -3,10 +3,9 @@ import { Configuration } from 'webpack-dev-server'
 import { appPublic } from '../paths'
 
 const devServerConfigFactory = (
-  protocol: string, host: string, port: number, publicPath: string, writeToDisk = false,
+  protocol: string, host: string, port: number, publicPath: string,
 ): Configuration => ({
   compress: true,
-  writeToDisk,
   clientLogLevel: 'none',
   contentBase: appPublic,
   watchContentBase: true,

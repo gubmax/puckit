@@ -2,6 +2,7 @@ import { HotModuleReplacementPlugin, DefinePlugin, Configuration } from 'webpack
 import ESLintWebpackPlugin from 'eslint-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
+import { ExportHtmlWebpackPlugin } from '@puckit/dev-utils'
 
 import {
   appSrc, appDist, moduleFileExtensions, appHtml,
@@ -90,6 +91,7 @@ function configFactory(port: number): Configuration {
         inject: true,
         template: appHtml,
       }),
+      new ExportHtmlWebpackPlugin(),
     ],
   }
 }
