@@ -1,10 +1,10 @@
 import cluster, { Worker } from 'cluster'
-import { Compilation, Compiler } from 'webpack'
+import { Compilation, Compiler, WebpackPluginInstance } from 'webpack'
 import { clearConsole } from '@puckit/dev-utils'
 
 import { printSspArgument, printSspEntryNameNotFound, printSspError } from '../../etc/messages'
 
-class StartServerPlugin {
+class StartServerPlugin implements WebpackPluginInstance {
   bundleName: string
 
   inspectPort: number
@@ -48,7 +48,7 @@ class StartServerPlugin {
       this.worker = worker
     })
 
-    cluster.on('error', (err) => {
+    cluster.on('error', (err: Error) => {
       printSspError()
       console.error(err)
     })
@@ -61,16 +61,16 @@ class StartServerPlugin {
     const { worker, startServer } = this
 
     if (worker && worker.isConnected()) {
-      process.kill(worker.process.pid)
+      process.kill(worker.process.pid, 'SIGUSR2')
+      callback()
+      return
     }
 
     startServer(compilation, callback)
   }
 
   apply(compiler: Compiler): void {
-    const { afterEmit } = this
-    const { hooks } = compiler
-    hooks.afterEmit.tapAsync('StartServerPlugin', afterEmit)
+    compiler.hooks.afterEmit.tapAsync('StartServerPlugin', this.afterEmit)
   }
 }
 
