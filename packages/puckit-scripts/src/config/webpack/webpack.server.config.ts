@@ -10,6 +10,8 @@ import {
 import StartServerPlugin from './plugins/StartServerWebpackPlugin'
 import tsLoader from './shared/tsLoader'
 
+const PRETTY_NODE_ERRORS = '@puckit/dev-utils/lib/prettyNodeErrors'
+
 function configFactory(inspectPort: number): Configuration {
   return {
     name: 'server',
@@ -18,6 +20,7 @@ function configFactory(inspectPort: number): Configuration {
     watch: true,
     devtool: 'cheap-module-source-map',
     entry: [
+      PRETTY_NODE_ERRORS,
       appServer,
     ],
     output: {
@@ -26,11 +29,15 @@ function configFactory(inspectPort: number): Configuration {
       publicPath: appPublic,
     },
     externals: [
-      nodeExternals(),
+      nodeExternals({ allowlist: [PRETTY_NODE_ERRORS] }),
     ],
     resolve: {
       extensions: moduleFileExtensions,
       modules: ['server', 'node_modules'],
+      alias: {
+        // This is required so symlinks work during development.
+        [PRETTY_NODE_ERRORS]: require.resolve(PRETTY_NODE_ERRORS),
+      },
     },
     module: {
       rules: [
