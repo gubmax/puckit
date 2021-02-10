@@ -26,4 +26,4 @@ npm start
 - [ ] Webpack config override
 - [ ] Jest
 - [ ] PostCSS
-- [ ] Config for Packit
+- [ ] Config for Puckit
