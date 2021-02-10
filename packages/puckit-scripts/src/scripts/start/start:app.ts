@@ -28,6 +28,7 @@ function onOccupied(port: number): void {
 
 function onDoneCompiling(): void {
   if (isChildProcess) {
+    process.send?.(ForkMessages.APP_SUCCESS)
     return
   }
 
@@ -83,11 +84,6 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
     if (err) {
       printFailedToCompile(MessageTags.APP)
       console.log(err)
-      return
-    }
-
-    if (isChildProcess) {
-      process.send?.(ForkMessages.APP_SUCCESS)
     }
   })
 
