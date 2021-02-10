@@ -63,7 +63,7 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
     callback,
     onInvalid: () => {
       if (isChildProcess) {
-        process.send?.(ForkMessages.COMPILING)
+        process.send?.(ForkMessages.SERVER_COMPILING)
         return
       }
       clearConsole()
@@ -71,7 +71,7 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
     },
     onAfterCompile: () => {
       if (isChildProcess) {
-        process.send?.(ForkMessages.AFTER_COMPILING)
+        process.send?.(ForkMessages.SERVER_AFTER_COMPILING)
         return
       }
       printCompiling.stop()

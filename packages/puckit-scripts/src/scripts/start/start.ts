@@ -36,7 +36,7 @@ async function waitForWebpack() {
   }
 }
 
-function spawnWorker(scriptName: string) {
+function runWorker(scriptName: string) {
   return fork(
     `${__dirname}/${scriptName}`,
     [ForkMessages.CHILD_PROCESS],
@@ -51,47 +51,65 @@ function printSuccess(): void {
 }
 
 let firstCompilingSuccess = false
-let compilingsCounter = 0
+let appIsCompiling = false
+let serverIsCompiling = false
 
 function messageReducer(message: Serializable): void {
   if (!firstCompilingSuccess) {
     return
   }
 
-  if (message === ForkMessages.COMPILING) {
-    if (!compilingsCounter) {
+  const noCompile = !appIsCompiling && !serverIsCompiling
+  const printSpinner = (start: boolean) => {
+    if (noCompile) {
+      return
+    }
+
+    if (start) {
       clearConsole()
-      printCompiling.start()
     }
-    compilingsCounter += 1
+    printCompiling[start ? 'start' : 'stop']()
+  }
+
+  if (message === ForkMessages.APP_COMPILING) {
+    printSpinner(true)
+    appIsCompiling = true
     return
   }
 
-  if (message === ForkMessages.AFTER_COMPILING) {
-    if (compilingsCounter > 0) {
-      compilingsCounter -= 1
-    }
-    if (!compilingsCounter) {
-      printCompiling.stop()
-    }
+  if (message === ForkMessages.SERVER_COMPILING) {
+    printSpinner(true)
+    serverIsCompiling = true
     return
   }
 
-  if (
-    !compilingsCounter
-     && (message === ForkMessages.SERVER_SUCCESS || message === ForkMessages.APP_SUCCESS)
-  ) {
+  if (message === ForkMessages.APP_AFTER_COMPILING) {
+    appIsCompiling = false
+    printSpinner(false)
+    return
+  }
+
+  if (message === ForkMessages.SERVER_AFTER_COMPILING) {
+    serverIsCompiling = false
+    printSpinner(false)
+    return
+  }
+
+  if (noCompile && (
+    message === ForkMessages.SERVER_SUCCESS
+    || message === ForkMessages.APP_SUCCESS
+  )) {
     printSuccess()
   }
 }
 
 removeDist()
 
-spawnWorker(ScriptNames.APP).on('message', async (appMessage) => {
+runWorker(ScriptNames.APP).on('message', async (appMessage) => {
   messageReducer(appMessage)
   if (appMessage === ForkMessages.APP_SUCCESS && !firstCompilingSuccess) {
     await waitForWebpack()
-    spawnWorker(ScriptNames.SERVER).on('message', (serverMessage) => {
+    runWorker(ScriptNames.SERVER).on('message', (serverMessage) => {
       messageReducer(serverMessage)
       if (serverMessage === ForkMessages.SERVER_SUCCESS && !firstCompilingSuccess) {
         firstCompilingSuccess = true

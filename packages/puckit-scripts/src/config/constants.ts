@@ -4,10 +4,12 @@ export enum ScriptNames {
 }
 
 export enum ForkMessages {
-  CHILD_PROCESS = 'is_child_process',
-  COMPILING = 'compiling',
-  AFTER_COMPILING = 'after_compiling',
+  APP_COMPILING = 'app_compiling',
+  APP_AFTER_COMPILING = 'app_after_compiling',
   APP_SUCCESS = 'app_success',
+  CHILD_PROCESS = 'is_child_process',
+  SERVER_COMPILING = 'server_compiling',
+  SERVER_AFTER_COMPILING = 'server_after_compiling',
   SERVER_SUCCESS = 'server_success',
 }
 

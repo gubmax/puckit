@@ -55,7 +55,7 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
     config: webpackConfig,
     onInvalid: () => {
       if (isChildProcess) {
-        process.send?.(ForkMessages.COMPILING)
+        process.send?.(ForkMessages.APP_COMPILING)
         return
       }
       clearConsole()
@@ -63,7 +63,7 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
     },
     onAfterCompile: () => {
       if (isChildProcess) {
-        process.send?.(ForkMessages.AFTER_COMPILING)
+        process.send?.(ForkMessages.APP_AFTER_COMPILING)
         return
       }
 
