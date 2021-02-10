@@ -1,4 +1,4 @@
-import cluster, { Worker } from 'cluster'
+import { fork, ChildProcess } from 'child_process'
 import { Compilation, Compiler, WebpackPluginInstance } from 'webpack'
 import { clearConsole } from '@puckit/dev-utils'
 
@@ -7,9 +7,11 @@ import { printSspArgument, printSspEntryNameNotFound, printSspError } from '../.
 class StartServerPlugin implements WebpackPluginInstance {
   bundleName: string
 
+  entryScript?: string
+
   inspectPort: number
 
-  worker: Worker | null
+  worker: ChildProcess | null
 
   constructor(bundleName: string, inspectPort: number) {
     if (bundleName === null || typeof bundleName !== 'string') {
@@ -20,13 +22,15 @@ class StartServerPlugin implements WebpackPluginInstance {
     this.bundleName = bundleName
     this.inspectPort = inspectPort
     this.worker = null
+    this.checkAssetName = this.checkAssetName.bind(this)
+    this.handleWebpackExit = this.handleWebpackExit.bind(this)
+    this.runWorker = this.runWorker.bind(this)
     this.afterEmit = this.afterEmit.bind(this)
     this.apply = this.apply.bind(this)
-    this.startServer = this.startServer.bind(this)
   }
 
-  startServer(compilation: Compilation, callback: Function): void {
-    const { bundleName, inspectPort } = this
+  checkAssetName(compilation: Compilation): void {
+    const { bundleName } = this
     const { assetsInfo, outputOptions } = compilation
     const allAssetsNames = [...assetsInfo.keys()]
     const assetName = allAssetsNames.find((key) => key === bundleName)
@@ -37,36 +41,62 @@ class StartServerPlugin implements WebpackPluginInstance {
       process.exit()
     }
 
-    const clusterOptions = {
-      exec: `${outputOptions.path}/${bundleName}`,
-      inspectPort,
+    this.entryScript = `${outputOptions.path}/${this.bundleName}`
+  }
+
+  handleWebpackExit(signal: string) {
+    if (this.worker) {
+      process.kill(this.worker.pid, signal)
+    }
+  }
+
+  runWorker(callback: Function): void {
+    if (this.worker || !this.entryScript) {
+      return
     }
 
-    cluster.setupMaster(clusterOptions)
-
-    cluster.on('online', (worker) => {
-      this.worker = worker
+    const worker = fork(this.entryScript, [], {
+      execArgv: process.execArgv,
+      silent: true,
     })
 
-    cluster.on('error', (err: Error) => {
+    worker.on('exit', () => {
+      process.kill(process.pid, 'SIGKILL')
+    })
+
+    worker.on('quit', () => {
+      this.worker = null
+    })
+
+    worker.on('error', (err: Error) => {
       printSspError()
       console.error(err)
     })
 
-    cluster.fork()
-    callback()
+    process.on('SIGINT', () => {
+      this.handleWebpackExit('SIGINT')
+    })
+
+    process.on('SIGTERM', () => {
+      this.handleWebpackExit('SIGTERM')
+    })
+
+    this.worker = worker
+
+    if (callback) {
+      callback()
+    }
   }
 
   afterEmit(compilation: Compilation, callback: Function): void {
-    const { worker, startServer } = this
+    this.checkAssetName(compilation)
 
-    if (worker && worker.isConnected()) {
-      process.kill(worker.process.pid, 'SIGUSR2')
+    if (this.worker) {
       callback()
       return
     }
 
-    startServer(compilation, callback)
+    this.runWorker(callback)
   }
 
   apply(compiler: Compiler): void {

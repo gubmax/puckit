@@ -18,7 +18,6 @@ function configFactory(inspectPort: number): Configuration {
     watch: true,
     devtool: 'cheap-module-source-map',
     entry: [
-      'webpack/hot/poll?1000',
       appServer,
     ],
     output: {
@@ -27,7 +26,7 @@ function configFactory(inspectPort: number): Configuration {
       publicPath: appPublic,
     },
     externals: [
-      nodeExternals({ allowlist: ['webpack/hot/poll?1000'] }),
+      nodeExternals(),
     ],
     resolve: {
       extensions: moduleFileExtensions,
