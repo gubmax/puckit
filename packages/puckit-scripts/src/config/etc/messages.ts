@@ -55,15 +55,3 @@ export function getWaitingWebpackMessage(): Spinner {
 export function printRemoveFiles(directoryPath: string): void {
   printMessage(MessageTypes.INFO, `Removing files from directory "${directoryPath}"`, MessageTags.PUCKIT)
 }
-
-export function printSspArgument(): void {
-  printMessage(MessageTypes.ERR, 'Argument must be a string', MessageTags.START_SERVER_PLUGIN)
-}
-
-export function printSspEntryNameNotFound(allAssetsNames: string[]): void {
-  printMessage(MessageTypes.ERR, `Entry name not found. Try one of: ${allAssetsNames.join(' ')}`, MessageTags.START_SERVER_PLUGIN)
-}
-
-export function printSspError(): void {
-  printMessage(MessageTypes.ERR, 'Error', MessageTags.START_SERVER_PLUGIN)
-}

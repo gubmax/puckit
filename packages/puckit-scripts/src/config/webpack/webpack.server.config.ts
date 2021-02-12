@@ -2,12 +2,12 @@ import { HotModuleReplacementPlugin, DefinePlugin, Configuration } from 'webpack
 import ESLintWebpackPlugin from 'eslint-webpack-plugin'
 // @ts-ignore
 import nodeExternals from 'webpack-node-externals'
+import { StartServerWebpackPlugin } from '@puckit/dev-utils'
 
 import {
   appServer, appDist, appPublic, moduleFileExtensions,
   appPath,
 } from '../paths'
-import StartServerPlugin from './plugins/StartServerWebpackPlugin'
 import tsLoader from './shared/tsLoader'
 
 const PRETTY_NODE_ERRORS = '@puckit/dev-utils/lib/prettyNodeErrors'
@@ -65,8 +65,8 @@ function configFactory(inspectPort: number): Configuration {
       ],
     },
     plugins: [
-      new StartServerPlugin('bundle.node.js', inspectPort),
       new HotModuleReplacementPlugin(),
+      new StartServerWebpackPlugin('bundle.node.js', inspectPort),
       new DefinePlugin({
         'process.env': JSON.stringify(process.env),
       }),

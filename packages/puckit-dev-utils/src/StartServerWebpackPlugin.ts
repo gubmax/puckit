@@ -1,8 +1,8 @@
 import { fork, ChildProcess } from 'child_process'
 import { Compilation, Compiler, WebpackPluginInstance } from 'webpack'
-import { clearConsole } from '@puckit/dev-utils'
 
-import { printSspArgument, printSspEntryNameNotFound, printSspError } from '../../etc/messages'
+import { printSspArgument, printSspEntryNameNotFound, printSspError } from './messages'
+import { clearConsole } from './console'
 
 class StartServerPlugin implements WebpackPluginInstance {
   bundleName: string
@@ -50,7 +50,7 @@ class StartServerPlugin implements WebpackPluginInstance {
     }
   }
 
-  runWorker(callback: Function): void {
+  runWorker(callback?: Function): void {
     if (this.worker || !this.entryScript) {
       return
     }
