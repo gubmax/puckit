@@ -11,6 +11,7 @@ import {
 import tsLoader from './shared/tsLoader'
 
 const PRETTY_NODE_ERRORS = '@puckit/dev-utils/lib/prettyNodeErrors'
+const WEBPACK_HOT = 'webpack/hot/poll?1000'
 
 function configFactory(inspectPort: number): Configuration {
   return {
@@ -21,15 +22,16 @@ function configFactory(inspectPort: number): Configuration {
     devtool: 'cheap-module-source-map',
     entry: [
       PRETTY_NODE_ERRORS,
+      WEBPACK_HOT,
       appServer,
     ],
     output: {
       path: appDist,
-      filename: 'bundle.node.js',
+      filename: 'server.js',
       publicPath: appPublic,
     },
     externals: [
-      nodeExternals({ allowlist: [PRETTY_NODE_ERRORS] }),
+      nodeExternals({ allowlist: [PRETTY_NODE_ERRORS, WEBPACK_HOT] }),
     ],
     resolve: {
       extensions: moduleFileExtensions,
@@ -38,6 +40,9 @@ function configFactory(inspectPort: number): Configuration {
         // This is required so symlinks work during development.
         [PRETTY_NODE_ERRORS]: require.resolve(PRETTY_NODE_ERRORS),
       },
+    },
+    watchOptions: {
+      ignored: '**/node_modules',
     },
     module: {
       rules: [
@@ -66,7 +71,7 @@ function configFactory(inspectPort: number): Configuration {
     },
     plugins: [
       new HotModuleReplacementPlugin(),
-      new StartServerWebpackPlugin('bundle.node.js', inspectPort),
+      new StartServerWebpackPlugin('server.js', inspectPort),
       new DefinePlugin({
         'process.env': JSON.stringify(process.env),
       }),

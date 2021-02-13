@@ -2,6 +2,10 @@
 
 declare module NodeJS {
   interface Global {
-    fetch: any
+    fetch: any;
+  }
+
+  interface Module {
+    hot: any;
   }
 }

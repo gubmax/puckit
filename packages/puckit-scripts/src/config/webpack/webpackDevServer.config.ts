@@ -9,6 +9,9 @@ const devServerConfigFactory = (
   clientLogLevel: 'none',
   contentBase: appPublic,
   watchContentBase: true,
+  watchOptions: {
+    ignored: /node_modules/,
+  },
   hot: true,
   publicPath: publicPath || '/',
   quiet: true,
