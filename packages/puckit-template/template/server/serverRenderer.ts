@@ -1,11 +1,11 @@
 import { createElement } from 'react'
 import { renderToString } from 'react-dom/server'
 
-import {App} from '../src/components/layout/App'
+import App from '../src/App'
 import htmlTemplate from '../dist/index.html'
 
 export async function serverRenderer(): Promise<string> {
-  const { getServerSideProps } = require(`${__dirname}/../src/components/layout/Main`)
+  const { getServerSideProps } = require(`${__dirname}/../src/Main`)
   const serverSideProps: object = await getServerSideProps()
 
   const app = createElement(App, {serverSideProps})
