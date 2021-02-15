@@ -30,6 +30,6 @@ export function printInstalledMessage(projectName: string, projectPath: string):
   printMessage(MessageTypes.DONE, `Success! Created ${boldText(projectName)} at "${projectPath}"\n`, MESSAGE_TAG)
   printMessage(MessageTypes.MAIN, 'Inside that directory, you can run several commands:\n')
   printMessage(MessageTypes.MAIN, `  ${boldText('npm start')} ─ Start application and server in development mode`)
-  printMessage(MessageTypes.MAIN, `  ${boldText('npm start:app')} ─ Start application in development mode`)
-  printMessage(MessageTypes.MAIN, `  ${boldText('npm start:server')} ─ Start server in development mode`)
+  printMessage(MessageTypes.MAIN, `  ${boldText('npm run start:app')} ─ Start application in development mode`)
+  printMessage(MessageTypes.MAIN, `  ${boldText('npm run start:server')} ─ Start server in development mode`)
 }
