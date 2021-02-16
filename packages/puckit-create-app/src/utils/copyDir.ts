@@ -11,7 +11,7 @@ async function copyDir(
   try {
     await copy(templatePath, projectPath)
 
-    return pathExists(pathResolve(projectPath, './gitignore'))
+    return await pathExists(pathResolve(projectPath, './gitignore'))
       .then((exists) => {
         if (exists) {
           return move(

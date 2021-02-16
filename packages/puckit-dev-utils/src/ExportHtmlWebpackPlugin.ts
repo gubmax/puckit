@@ -22,7 +22,7 @@ class ExportHtmlPlugin implements WebpackPluginInstance {
 
   static exportHtml(compiler: Compiler, compilation: Compilation): void {
     const write = (
-      htmlPluginData: {outputName: string}, callback: Function,
+      htmlPluginData: { outputName: string }, callback: Function,
     ) => ExportHtmlPlugin.writeAsset(
       compilation, htmlPluginData.outputName, callback,
     )

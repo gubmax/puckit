@@ -19,14 +19,14 @@
     "puckit-create-app": "bin/puckit-create-app.js"
   },
   "dependencies": {
-    "commander": "^6.1.0",
-    "execa": "^4.0.3",
-    "fs-extra": "^9.0.1",
     "@puckit/dev-utils": "0.1.2",
-    "@puckit/template": "0.1.3"
+    "@puckit/template": "0.1.3",
+    "commander": "^7.1.0",
+    "execa": "^5.0.0",
+    "fs-extra": "^9.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.1"
+    "@types/fs-extra": "^9.0.7"
   },
   "files": [
     "bin",

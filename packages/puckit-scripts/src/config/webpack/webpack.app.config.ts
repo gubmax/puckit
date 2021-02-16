@@ -12,6 +12,8 @@ import styleLoaderConfig from './shared/styleLoaderConfig'
 import babelOptions from './shared/babelOptions'
 import tsLoader from './shared/tsLoader'
 
+const REACT_REFRESH_BABEL = require.resolve('react-refresh/babel')
+
 function configFactory(port: number): Configuration {
   return {
     name: 'app',
@@ -33,7 +35,7 @@ function configFactory(port: number): Configuration {
         name: false,
       },
       runtimeChunk: {
-        name: (entrypoint: {name: string}) => `runtime-${entrypoint.name}`,
+        name: (entrypoint: { name: string }) => `runtime-${entrypoint.name}`,
       },
     },
     resolve: {
@@ -41,7 +43,7 @@ function configFactory(port: number): Configuration {
       modules: ['src', 'node_modules'],
     },
     module: {
-      strictExportPresence: true,
+      parser: { javascript: { strictExportPresence: true } },
       rules: [
         { parser: { requireEnsure: false } },
         {
@@ -60,7 +62,7 @@ function configFactory(port: number): Configuration {
               use: [
                 {
                   loader: 'babel-loader',
-                  options: { ...babelOptions, plugins: [require.resolve('react-refresh/babel')] },
+                  options: { ...babelOptions, plugins: [REACT_REFRESH_BABEL] },
                 },
                 tsLoader,
               ],
@@ -68,7 +70,7 @@ function configFactory(port: number): Configuration {
             {
               test: /\.(m?jsx?)$/,
               loader: 'babel-loader',
-              options: { ...babelOptions, plugins: [require.resolve('react-refresh/babel')] },
+              options: { ...babelOptions, plugins: [REACT_REFRESH_BABEL] },
             },
             styleLoaderConfig,
           ],
