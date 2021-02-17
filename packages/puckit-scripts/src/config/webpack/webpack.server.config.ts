@@ -7,6 +7,7 @@ import { StartServerWebpackPlugin } from '@puckit/dev-utils'
 import {
   appServer, appDist, appPublic, moduleFileExtensions,
   appPath,
+  appSrc,
 } from '../paths'
 import tsLoader from './shared/tsLoader'
 
@@ -35,8 +36,10 @@ function configFactory(inspectPort: number): Configuration {
     ],
     resolve: {
       extensions: moduleFileExtensions,
-      modules: ['server', 'node_modules'],
+      modules: ['node_modules'],
       alias: {
+        src: appSrc,
+        server: appServer,
         // This is required so symlinks work during development.
         [PRETTY_NODE_ERRORS]: require.resolve(PRETTY_NODE_ERRORS),
       },

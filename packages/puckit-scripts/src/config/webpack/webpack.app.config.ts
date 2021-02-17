@@ -40,7 +40,8 @@ function configFactory(port: number): Configuration {
     },
     resolve: {
       extensions: moduleFileExtensions,
-      modules: ['src', 'node_modules'],
+      modules: ['node_modules'],
+      alias: { src: appSrc },
     },
     module: {
       parser: { javascript: { strictExportPresence: true } },
