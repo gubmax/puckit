@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { writeFile } from 'fs'
+import { existsSync, mkdirSync, writeFile } from 'fs'
 import { Compilation, Compiler, WebpackPluginInstance } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
@@ -9,9 +9,12 @@ class ExportHtmlPlugin implements WebpackPluginInstance {
   static writeAsset(
     compilation: Compilation, webpackHtmlFilename: string, callback: Function,
   ): void {
-    const fullPath = resolve(
-      compilation.compiler.outputPath, webpackHtmlFilename,
-    )
+    const { outputPath } = compilation.compiler
+    const fullPath = resolve(outputPath, webpackHtmlFilename)
+
+    if (!existsSync(outputPath)) {
+      mkdirSync(outputPath)
+    }
 
     writeFile(
       fullPath,
@@ -21,11 +24,9 @@ class ExportHtmlPlugin implements WebpackPluginInstance {
   }
 
   static exportHtml(compiler: Compiler, compilation: Compilation): void {
-    const write = (
-      htmlPluginData: { outputName: string }, callback: Function,
-    ) => ExportHtmlPlugin.writeAsset(
-      compilation, htmlPluginData.outputName, callback,
-    )
+    function write(htmlPluginData: { outputName: string }, callback: Function): void {
+      ExportHtmlPlugin.writeAsset(compilation, htmlPluginData.outputName, callback)
+    }
 
     const HtmlWebpackPluginInstance = compiler.options.plugins
       .map(({ constructor }) => constructor)
