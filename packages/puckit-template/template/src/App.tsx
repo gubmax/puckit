@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import ServerSidePropsProvider, { ServerSideProps } from './ServerSidePropsProvider'
+import ServerSidePropsContext, { ServerSideProps } from './ServerSidePropsContext'
 import Main from './Main'
 
 type AppProps = {
@@ -9,9 +9,9 @@ type AppProps = {
 
 const App: FC<AppProps> = ({ serverSideProps = {} }) => {
   return (
-    <ServerSidePropsProvider value={serverSideProps}>
+    <ServerSidePropsContext.Provider value={serverSideProps}>
       <Main />
-    </ServerSidePropsProvider>
+    </ServerSidePropsContext.Provider>
   )
 }
 

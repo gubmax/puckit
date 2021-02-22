@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react'
 
-import { ServerSidePropsContext } from './ServerSidePropsProvider'
+import ServerSidePropsContext from './ServerSidePropsContext'
 
 import s from './Main.css'
 import logo from './logo.svg'
