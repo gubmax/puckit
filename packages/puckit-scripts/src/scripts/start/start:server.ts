@@ -7,8 +7,9 @@ import configFactory from '../../config/webpack/webpack.server.config'
 import createCompiler from '../../config/etc/createCompiler'
 import checkChildProcess from '../../config/helpers/checkChildProcess'
 import {
-  printLink, printSuccessMsg, getCompilingMessage, printDevServer,
-  printCompiledWithWarnings, printFailedToCompile, printPortWasOccupied,
+  printLink, concatUrl, printSuccessMsg, getCompilingMessage,
+  printDevServer, printCompiledWithWarnings, printFailedToCompile,
+  printPortWasOccupied,
 } from '../../config/etc/messages'
 import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
 
@@ -54,7 +55,7 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
     }
 
     printSuccessMsg(MessageTags.SERVER)
-    printLink(LinkTypes.SERVER, PROTOCOL, HOST, currPort)
+    printLink(LinkTypes.SERVER, concatUrl(PROTOCOL, HOST, currPort))
   }
 
   createCompiler({

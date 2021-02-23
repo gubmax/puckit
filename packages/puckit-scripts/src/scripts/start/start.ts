@@ -8,7 +8,8 @@ import {
 import removeDist from '../../config/etc/removeDist'
 import { appDist } from '../../config/paths'
 import {
-  printLink, printSuccessMsg, getWaitingWebpackMessage, getCompilingMessage,
+  printLink, concatUrl, printSuccessMsg, getWaitingWebpackMessage,
+  getCompilingMessage,
 } from '../../config/etc/messages'
 import {
   ForkMessages, LinkTypes, MessageTags, ScriptNames,
@@ -46,8 +47,8 @@ function runWorker(scriptName: string) {
 
 function printSuccess(): void {
   printSuccessMsg(MessageTags.PUCKIT)
-  printLink(LinkTypes.APP, PROTOCOL, HOST, PORT)
-  printLink(LinkTypes.SERVER, PROTOCOL, HOST, SERVER_PORT)
+  printLink(LinkTypes.APP, `   ${concatUrl(PROTOCOL, HOST, PORT)}`)
+  printLink(LinkTypes.SERVER, concatUrl(PROTOCOL, HOST, SERVER_PORT))
 }
 
 let firstCompilingSuccess = false

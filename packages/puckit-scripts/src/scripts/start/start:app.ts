@@ -8,8 +8,9 @@ import configFactory from '../../config/webpack/webpack.app.config'
 import devServerConfigFactory from '../../config/webpack/webpackDevServer.config'
 import createCompiler from '../../config/etc/createCompiler'
 import {
-  printLink, printSuccessMsg, printPortWasOccupied, printWds,
-  printFailedToCompile, getCompilingMessage, printCompiledWithWarnings,
+  printLink, concatUrl, printSuccessMsg, printPortWasOccupied,
+  printWds, printFailedToCompile, getCompilingMessage,
+  printCompiledWithWarnings,
 } from '../../config/etc/messages'
 import checkChildProcess from '../../config/helpers/checkChildProcess'
 import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
@@ -33,7 +34,7 @@ function onDoneCompiling(): void {
   }
 
   printSuccessMsg(MessageTags.APP)
-  printLink(LinkTypes.APP, PROTOCOL, HOST, PORT)
+  printLink(LinkTypes.APP, concatUrl(PROTOCOL, HOST, PORT))
 }
 
 printWds()

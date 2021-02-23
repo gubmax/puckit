@@ -42,10 +42,12 @@ export function printSuccessMsg(tag: MessageTags): void {
   printMessage(MessageTypes.MAIN, `\nYou can now view ${boldText(appName)} in the browser\n`)
 }
 
-export function printLink(
-  type: LinkTypes, protocol: string, host: string, port: string | number,
-): void {
-  return printMessage(MessageTypes.MAIN, `${boldText(type)}: ${protocol}://${host}:${boldText(port)}`)
+export function concatUrl(protocol: string, host: string, port: string | number) {
+  return `${protocol}://${host}:${boldText(port)}`
+}
+
+export function printLink(type: LinkTypes, url: string): void {
+  return printMessage(MessageTypes.MAIN, `${type}: ${url}`)
 }
 
 export function getWaitingWebpackMessage(): Spinner {
