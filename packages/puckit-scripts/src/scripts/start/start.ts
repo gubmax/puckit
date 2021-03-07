@@ -60,9 +60,9 @@ function messageReducer(message: Serializable): void {
     return
   }
 
-  const noCompile = !appIsCompiling && !serverIsCompiling
+  const isCompile = () => appIsCompiling || serverIsCompiling
   const printSpinner = (start: boolean) => {
-    if (noCompile) {
+    if (isCompile()) {
       return
     }
 
@@ -96,7 +96,7 @@ function messageReducer(message: Serializable): void {
     return
   }
 
-  if (noCompile && (
+  if (!isCompile() && (
     message === ForkMessages.SERVER_SUCCESS
     || message === ForkMessages.APP_SUCCESS
   )) {
