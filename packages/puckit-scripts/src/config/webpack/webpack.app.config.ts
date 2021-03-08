@@ -63,15 +63,22 @@ function configFactory(port: number): Configuration {
               use: [
                 {
                   loader: 'babel-loader',
-                  options: { ...babelOptions, plugins: [REACT_REFRESH_BABEL] },
+                  options: {
+                    ...babelOptions,
+                    plugins: [REACT_REFRESH_BABEL],
+                  },
                 },
                 tsLoader,
               ],
             },
             {
               test: /\.(m?jsx?)$/,
+              exclude: /node_modules/,
               loader: 'babel-loader',
-              options: { ...babelOptions, plugins: [REACT_REFRESH_BABEL] },
+              options: {
+                ...babelOptions,
+                plugins: [REACT_REFRESH_BABEL],
+              },
             },
             styleLoaderConfig,
           ],

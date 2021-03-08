@@ -22,7 +22,7 @@ npm start
 ## To Do
 - [ ] Production scripts
 - [x] React refresh
-- [ ] Babel config override
+- [x] Babel config override
 - [ ] Webpack config override
 - [ ] Jest
 - [ ] PostCSS

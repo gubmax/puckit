@@ -1,5 +1,5 @@
 const babelOptions = {
-  presets: ['@babel/preset-env'],
+  babelrc: true,
   cacheDirectory: true,
   cacheCompression: false,
 }
