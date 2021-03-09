@@ -1,6 +1,6 @@
 {
   "name": "@puckit/template",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The base template for Puckit",
   "homepage": "https://github.com/gubmax/puckit#readme",
   "license": "MIT",

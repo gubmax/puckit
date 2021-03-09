@@ -1,6 +1,6 @@
 {
   "name": "@puckit/scripts",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Create React universal web-applications with zero configuration",
   "homepage": "https://github.com/gubmax/puckit#readme",
   "license": "MIT",
