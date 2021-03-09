@@ -8,8 +8,8 @@
     "start:server": "puckit-scripts start:server"
   },
   "dependencies": {
-    "@puckit/dev-utils": "0.1.2",
-    "@puckit/scripts": "0.1.2",
+    "@puckit/dev-utils": "0.1.3",
+    "@puckit/scripts": "0.1.4",
     "fastify": "^3.12.0",
     "node-fetch": "^3.0.0-beta.9",
     "react": "^17.0.1",
