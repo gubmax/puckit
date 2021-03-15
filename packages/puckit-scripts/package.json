@@ -44,6 +44,9 @@
   "devDependencies": {
     "@types/webpack-dev-server": "^3.11.1"
   },
+  "peerDependencies": {
+    "eslint": "7.x"
+  },
   "files": [
     "bin",
     "lib"

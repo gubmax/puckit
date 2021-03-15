@@ -6,7 +6,6 @@ import { StartServerWebpackPlugin } from '@puckit/dev-utils'
 
 import {
   appServer, appDist, appPublic, moduleFileExtensions,
-  appPath,
   appSrc,
 } from '../paths'
 import tsLoader from './shared/tsLoader'
@@ -80,9 +79,8 @@ function configFactory(inspectPort: number): Configuration {
       }),
       new ESLintWebpackPlugin({
         extensions: moduleFileExtensions,
-        eslintPath: require.resolve('eslint'),
         context: appServer,
-        files: appPath,
+        exclude: appSrc,
       }),
     ],
   }

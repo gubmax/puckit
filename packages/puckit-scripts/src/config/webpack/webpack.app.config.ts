@@ -6,7 +6,6 @@ import { ExportHtmlWebpackPlugin } from '@puckit/dev-utils'
 
 import {
   appSrc, appDist, moduleFileExtensions, appHtml,
-  appPath,
 } from '../paths'
 import styleLoaderConfig from './shared/styleLoaderConfig'
 import babelOptions from './shared/babelOptions'
@@ -93,9 +92,7 @@ function configFactory(port: number): Configuration {
       }),
       new ESLintWebpackPlugin({
         extensions: moduleFileExtensions,
-        eslintPath: require.resolve('eslint'),
         context: appSrc,
-        files: appPath,
       }),
       new HtmlWebpackPlugin({
         inject: true,
