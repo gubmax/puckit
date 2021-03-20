@@ -2,7 +2,7 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import { clearConsole } from '@puckit/dev-utils'
 
-import { PROTOCOL, HOST, PORT } from '../../config/settings'
+import getSettings from '../../config/settings'
 import choosePort from '../../config/etc/choosePort'
 import configFactory from '../../config/webpack/webpack.app.config'
 import devServerConfigFactory from '../../config/webpack/webpackDevServer.config'
@@ -20,6 +20,7 @@ process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
+const { PROTOCOL, HOST, PORT } = getSettings()
 const isChildProcess = checkChildProcess()
 const printCompiling = getCompilingMessage(MessageTags.APP)
 
@@ -67,7 +68,6 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
         process.send?.(ForkMessages.APP_AFTER_COMPILING)
         return
       }
-
       printCompiling.stop()
     },
     onFailed: () => printFailedToCompile(MessageTags.APP),

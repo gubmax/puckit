@@ -2,9 +2,7 @@ import { fork, Serializable } from 'child_process'
 import { readFileSync } from 'fs'
 import { clearConsole } from '@puckit/dev-utils'
 
-import {
-  PROTOCOL, HOST, PORT, SERVER_PORT,
-} from '../../config/settings'
+import getSettings from '../../config/settings'
 import removeDist from '../../config/etc/removeDist'
 import { appDist } from '../../config/paths'
 import {
@@ -20,6 +18,9 @@ process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
+const {
+  PROTOCOL, HOST, PORT, SERVER_PORT,
+} = getSettings()
 const printCompiling = getCompilingMessage(MessageTags.PUCKIT)
 const printWaitingWebpack = getWaitingWebpackMessage()
 

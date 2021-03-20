@@ -1,7 +1,7 @@
 import webpack, { Stats } from 'webpack'
 import { clearConsole } from '@puckit/dev-utils'
 
-import { PROTOCOL, HOST, SERVER_PORT } from '../../config/settings'
+import getSettings from '../../config/settings'
 import choosePort from '../../config/etc/choosePort'
 import configFactory from '../../config/webpack/webpack.server.config'
 import createCompiler from '../../config/etc/createCompiler'
@@ -18,6 +18,7 @@ process.env.NODE_ENV = 'development'
 
 require('../../config/env')
 
+const { PROTOCOL, HOST, SERVER_PORT } = getSettings()
 const isChildProcess = checkChildProcess()
 const printCompiling = getCompilingMessage(MessageTags.SERVER)
 

@@ -10,7 +10,7 @@ interface MainServerSideProps {
 }
 
 export const getServerSideProps = async (): Promise<MainServerSideProps> => {
-  const res = await fetch('http://localhost:8000/api/data', { method: 'POST' })
+  const res = await fetch(`http://localhost:${process.env.APP_SERVER_PORT || 8000}/api/data`, { method: 'POST' })
   const serverSideMsg: string = await res.text()
   return { serverSideMsg }
 }

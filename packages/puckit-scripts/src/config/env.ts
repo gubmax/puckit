@@ -1,5 +1,7 @@
 import { config } from 'dotenv'
 
-const res = config({ path: `${process.cwd()}/.env.${process.env.NODE_ENV}` })
+import { appPath } from './paths'
+
+const res = config({ path: `${appPath}/.env.${process.env.NODE_ENV}` })
 
 export default res.parsed
