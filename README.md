@@ -23,7 +23,7 @@ npm start
 - [ ] Production scripts
 - [x] React refresh
 - [x] Babel config override
-- [ ] Webpack config override
+- [x] Webpack config override
 - [ ] Jest
 - [ ] PostCSS
-- [ ] Config for Puckit
+- [x] Config for Puckit

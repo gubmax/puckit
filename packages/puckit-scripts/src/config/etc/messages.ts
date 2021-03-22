@@ -57,3 +57,7 @@ export function getWaitingWebpackMessage(): Spinner {
 export function printRemoveFiles(directoryPath: string): void {
   printMessage(MessageTypes.INFO, `Removing files from directory "${directoryPath}"`, MessageTags.PUCKIT)
 }
+
+export function printInvalidPuckitConfig(): void {
+  printMessage(MessageTypes.ERR, 'Invalid puckit.config.js', MessageTags.PUCKIT)
+}

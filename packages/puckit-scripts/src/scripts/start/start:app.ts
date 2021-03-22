@@ -14,6 +14,7 @@ import {
 } from '../../config/etc/messages'
 import checkChildProcess from '../../config/helpers/checkChildProcess'
 import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
+import loadPuckitConfig from '../../config/etc/loadPuckitConfig'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
@@ -51,7 +52,15 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
     throw err
   })
 
+  const puckitConfig = loadPuckitConfig()
+  const {
+    app: modifyAppConfig = (config: object) => config,
+    devServer: modifyDevServerConfig = (config: object) => config,
+  } = puckitConfig.modifyWebpackConfig || {}
+
   const webpackConfig = configFactory(PORT)
+  modifyAppConfig(webpackConfig)
+
   const compiler = createCompiler({
     webpack,
     config: webpackConfig,
@@ -79,6 +88,9 @@ choosePort(HOST, PORT, onOccupied).then((currPort) => {
   const webpackDevServerConfig = devServerConfigFactory(
     PROTOCOL, HOST, PORT, typeof publicPath === 'string' ? publicPath : '/',
   )
+
+  modifyDevServerConfig(webpackDevServerConfig)
+
   const devServer = new WebpackDevServer(compiler, webpackDevServerConfig)
 
   devServer.listen(currPort, HOST, (err?: Error) => {

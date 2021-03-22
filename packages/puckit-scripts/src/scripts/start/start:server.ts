@@ -12,6 +12,7 @@ import {
   printPortWasOccupied,
 } from '../../config/etc/messages'
 import { ForkMessages, LinkTypes, MessageTags } from '../../config/constants'
+import loadPuckitConfig from '../../config/etc/loadPuckitConfig'
 
 process.env.BABEL_ENV = 'development'
 process.env.NODE_ENV = 'development'
@@ -39,7 +40,13 @@ choosePort(HOST, SERVER_PORT, onOccupied).then((currPort) => {
     throw err
   })
 
+  const puckitConfig = loadPuckitConfig()
+  const {
+    server: modifyServerConfig = (config: object) => config,
+  } = puckitConfig.modifyWebpackConfig || {}
+
   const webpackConfig = configFactory(currPort)
+  modifyServerConfig(webpackConfig)
 
   const callback = (err?: Error, stats?: Stats): void => {
     if (err || stats?.hasErrors()) {

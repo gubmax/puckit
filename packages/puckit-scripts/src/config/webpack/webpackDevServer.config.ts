@@ -20,10 +20,6 @@ const devServerConfigFactory = (
   port,
   overlay: false,
   historyApiFallback: true,
-  // TODO: Replace headers on proxy
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-  },
 })
 
 export default devServerConfigFactory
