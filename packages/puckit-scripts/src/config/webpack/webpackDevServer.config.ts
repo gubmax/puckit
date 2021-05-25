@@ -7,6 +7,7 @@ const devServerConfigFactory = (
 ): Configuration => ({
   compress: true,
   clientLogLevel: 'none',
+  headers: { 'Access-Control-Allow-Origin': '*' },
   contentBase: appPublic,
   watchContentBase: true,
   watchOptions: {
@@ -19,7 +20,9 @@ const devServerConfigFactory = (
   host,
   port,
   overlay: false,
-  historyApiFallback: true,
+  historyApiFallback: {
+    disableDotRule: true,
+  },
 })
 
 export default devServerConfigFactory
